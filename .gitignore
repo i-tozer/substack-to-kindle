@@ -1,0 +1,41 @@
+# Environment variables
+.env
+
+# Binaries
+substack-to-kindle
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+
+# macOS
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+
+# Go build artifacts
+/bin
+
+# IDE files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# OS files
+Thumbs.db 
