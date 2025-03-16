@@ -28,6 +28,10 @@ func main() {
 	urlFlag := flag.String("url", "", "URL of the Substack article to convert")
 	pdfFlag := flag.String("pdf", "", "Path to a local PDF file to convert")
 	format := flag.String("format", "epub", "Output format: epub, azw3, or mobi")
+	skipCalibre := flag.Bool("skip-calibre", true, "Skip using Calibre even if it's available (default: true)")
+	titleFlag := flag.String("title", "", "Custom title for the document")
+	authorFlag := flag.String("author", "", "Custom author for the document")
+	includePDF := flag.Bool("include-pdf", false, "Include the original PDF in the output file (default: false)")
 	flag.Parse()
 
 	// Validate format
@@ -54,16 +58,29 @@ func main() {
 			log.Fatalf("Invalid PDF path: %v", err)
 		}
 
+		// Create conversion options
+		options := &pdfconverter.ConversionOptions{
+			SkipCalibre:        *skipCalibre,
+			CustomTitle:        *titleFlag,
+			CustomAuthor:       *authorFlag,
+			IncludeOriginalPDF: *includePDF,
+		}
+
+		// If no custom author is provided, use a default
+		if options.CustomAuthor == "" {
+			options.CustomAuthor = "PDF Conversion"
+		}
+
 		// Convert PDF to the specified format
 		fmt.Printf("Converting PDF to %s format...\n", strings.ToUpper(*format))
 
 		switch *format {
 		case "epub":
-			result, err = pdfconverter.ConvertPDFToEPUB(pdfPath)
+			result, err = pdfconverter.ConvertPDFToEPUB(pdfPath, options)
 		case "azw3":
-			result, err = pdfconverter.ConvertPDFToAZW3(pdfPath)
+			result, err = pdfconverter.ConvertPDFToAZW3(pdfPath, options)
 		case "mobi":
-			result, err = pdfconverter.ConvertPDFToMOBI(pdfPath)
+			result, err = pdfconverter.ConvertPDFToMOBI(pdfPath, options)
 		}
 
 		if err != nil {
