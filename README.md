@@ -1,6 +1,6 @@
 # Substack to Kindle
 
-A Go application that converts Substack articles to EPUB, AZW3, or MOBI format and sends them to your Kindle device via email.
+A Go application that converts Substack articles to EPUB, AZW3, or MOBI format and sends them to your Kindle device via email. It can also convert local PDF files to Kindle-compatible formats.
 
 ## Prerequisites
 
@@ -47,6 +47,8 @@ To receive documents on your Kindle:
 
 ## Usage
 
+### Converting Substack Articles
+
 Convert and send a Substack article to your Kindle:
 
 ```
@@ -59,12 +61,26 @@ Or simply:
 go run main.go https://example.substack.com/p/article-name
 ```
 
+### Converting PDF Files
+
+Convert and send a local PDF file to your Kindle:
+
+```
+go run main.go -pdf /path/to/your/file.pdf
+```
+
 ### Specifying Output Format
 
-By default, the application converts articles to EPUB format, which is the recommended format for sending to Kindle devices. You can specify a different output format using the `-format` flag:
+By default, the application converts content to EPUB format, which is the recommended format for sending to Kindle devices. You can specify a different output format using the `-format` flag:
 
 ```
 go run main.go -url https://example.substack.com/p/article-name -format azw3
+```
+
+Or for PDF files:
+
+```
+go run main.go -pdf /path/to/your/file.pdf -format azw3
 ```
 
 > **Important Note**: As of 2023, Amazon no longer supports sending MOBI files through the Send to Kindle service. While the application still supports creating MOBI files, we recommend using EPUB or AZW3 formats for Kindle delivery.
@@ -89,6 +105,7 @@ This will:
 ## Features
 
 - Scrapes Substack articles preserving formatting and images
+- Converts local PDF files to Kindle-compatible formats
 - Converts content to EPUB (default), AZW3, or MOBI format
 - Direct conversion to AZW3 and MOBI formats without requiring Calibre
 - Uses Calibre for conversion when available (better quality)
@@ -97,7 +114,9 @@ This will:
 
 ## How It Works
 
-1. **Scraping**: Extracts article content, title, author, and images from the Substack URL
+1. **Input Processing**:
+   - For Substack URLs: Extracts article content, title, author, and images from the URL
+   - For PDF files: Processes the local PDF file
 2. **Conversion**: 
    - For EPUB: Converts the content directly to EPUB format
    - For AZW3/MOBI: Converts directly to the requested format
@@ -107,6 +126,7 @@ This will:
 ## Limitations
 
 - Works only with public Substack articles (no paywall content)
+- PDF conversion requires Calibre to be installed for best results
 - Some complex formatting or interactive elements may not be preserved
 - MOBI format is no longer supported by Amazon's Send to Kindle service
 
@@ -115,4 +135,5 @@ This will:
 - `main.go`: Main application entry point
 - `pkg/scraper`: Module for extracting content from Substack articles
 - `pkg/converter`: Module for converting articles to EPUB, AZW3, or MOBI format
+- `pkg/pdfconverter`: Module for converting PDF files to Kindle-compatible formats
 - `pkg/sender`: Module for sending files to Kindle via email 
